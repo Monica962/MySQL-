@@ -1,1 +1,71 @@
-  存储过程，即【为以后的使用而保存的一条或多条MySQL语句的集合】。可将其视为批文件，但其作用不仅限于批处理。
+存储过程，即【为以后的使用而保存的一条或多条MySQL语句的集合】。可将其视为批文件，但其作用不仅限于批处理。
+
+
+
+
+创建存储过程
+
+  CREATE PROCEDURE XXX(   )
+  BEGIN
+  ...;
+  END;
+  
+    xxx：自定义存储过程命名。
+    (   )：列举需传递的参数，须指明参数类型。
+      1）IN：将参数传递给存储过程。
+      2）OUT：从存储过程传出一个值返回给调用者。
+      3）INOUT：对存储过程的传入和传出。
+    BEGIN...END：限定存储过程体，即一个SELECT语句。
+    
+    
+调用存储过程
+
+  CALL xxx(   );
+    括号中，存储过程要求几个参数，调用时应传递相应数量的参数。
+    若存储过程返回一个值，需应存放在变量中，变量以@开始。
+    
+    
+查看调用存储过程的结果
+
+  SELECT ....... ;
+
+
+
+
+例1：
+
+CREATE PROCEDURE productprice(
+OUT pl FLOAT,
+OUT ph FLOAT,
+OUT pa FLOAT
+)
+
+BEGIN
+SELECT MIN(price) INTO pl FROM goods;
+SELECT MAX(price) INTO ph FROM goods;
+SELECT AVG(price) INTO pa FROM goods;
+END;
+
+CALL productprice(@low,@high,@average);
+
+SELECT @low,@high,@average;
+
+
+
+
+例2：
+
+CREATE PROCEDURE ordertotal(
+IN oid INT,
+OUT ototal FLOAT
+)
+
+BEGIN
+SELECT SUM(price) FROM goods
+WHERE order_id=oid
+INTO ototal;
+END;
+
+CALL ordertotal(3, @total);
+
+SELECT @total AS total;
