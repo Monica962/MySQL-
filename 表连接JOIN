@@ -1,0 +1,43 @@
+连接使用 JOIN 关键字将一个或者多个表按照彼此间的关系连接为一个结果集。
+
+
+
+
+交叉连接CROSS JOIN
+  交叉连接将涉及到的所有表中的所有记录都包含在结果集中。
+  
+  有两种定义方式：
+    隐式（常用）：在 SELECT 语句的 FROM 语句后将要进行交叉连接的表名列出即可。
+      SELECT vid,product,price,vendor
+      FROM vendors,products;
+      
+    显式CROSS JOIN，不存在 ON 子句：
+      SELECT vid,product,price,vendor
+      FROM vendors
+      CROSS JOIN products;
+
+
+
+
+内连接INNER JOIN（相当于等值连接）
+
+  (INNER) JOIN table_name ON condition
+    table_name：被关联的表名；
+    condition：连接条件;
+    INNER可选，INNER JOIN是默认的连接方式。
+    
+  检索所有客户名为 Tom 的客户的订单号及订单价格：
+    SELECT FNumber,FPrice
+    FROM T_Order
+    INNER JOIN T_Customer
+    ON FCustomerID=T_Customer.FID
+    WHERE T_Customer.FName='Tom';
+
+
+
+
+外连接OUTER JOIN（解决空值匹配问题）
+  三种类型，位于 JOIN 关键字左侧即左表，右侧即右表：
+    右外部连接（RIGHT OUTER JOIN)：左表可能 NULL 。
+    左外部连接(LEFT OUTER JOIN)：左表中所有记录均被放到结果集中，无论右表是否存在匹配记录，即右表可能出现 NULL。
+    全外部连接(FULL OUTER JOIN)：左右表均可能 NULL 。
