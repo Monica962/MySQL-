@@ -1,3 +1,39 @@
 需要组合查询UNION的两种基本情况：
 1）在单个查询中，从不同表返回类似结构的数据；
 2）对单个表执行多个查询，按单个查询返回数据。
+
+
+UNION从查询结果集中自动去除了重复的行； 
+如不想去除，应使用UNION ALL。
+
+
+
+
+
+多数情况下，组合相同表的两个查询完成的工作，与具有多个WHERE子句条件的单条查询完成的工作相同。
+
+SELECT * FROM goods
+WHERE price=3.5      /* 第一条WHERE子句不用加分号 */
+UNION
+SELECT * FROM goods
+WHERE good='milk';
+
+相当于
+
+SELECT * FROM goods
+WHERE price=3.5
+OR
+WHERE good='milk';
+
+
+
+
+
+使用UNION组合查询时，只能用一条ORDER BY子句，在最后一条SELECT语句之后。
+
+SELECT * FROM goods
+WHERE price>5
+UNION
+SELECT * FROM goods
+WHERE quantity>10
+ORDER BY price DESC;
