@@ -69,3 +69,37 @@ END;
 CALL ordertotal(3, @total);
 
 SELECT @total AS total;
+
+
+
+
+
+例3：
+
+CREATE PROCEDURE ordertax
+(
+IN onumber INT,
+IN taxable BOOLEAN,
+OUT ordertax FLOAT
+)
+
+BEGIN
+
+DECLARE taxrate INT DEFAULT 6;   /* 声明变量，该存储过程设计中需用到taxrate */
+
+SELECT SUM(price*quantity)
+INTO ordertax   /* 存放到out类型变量中 */
+FROM goods
+WHERE order_id=onumber;
+
+IF taxable THEN
+SELECT ordertax+(ordertax*taxrate/100)  /* 应用所声明的变量 */
+INTO ordertax;
+END IF;
+
+END;
+
+CALL ordertax(1,1,@total);
+SELECT @total;
+
+
