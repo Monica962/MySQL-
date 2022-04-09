@@ -10,3 +10,122 @@
   如果不使用游标功能，直接使用select查询，会一次性将结果集打印到屏幕上，你无法针对结果集做第二次编
 程。使用游标功能后，我们可以将得到的结果先保存起来，然后可以随意进行自己的编程，得到我们最终想要的
 结果集。
+
+
+  ！！MySQL游标只能用于存储过程和函数！！
+  
+  
+  
+  
+使用游标的步骤：
+
+（1）定义一个游标 
+      DECLARE 游标名 CURSOR
+      FOR
+      SELECT ... FROM ...;
+（2）打开游标
+      OPEN 游标名;
+（3）取值
+      FETCH 游标名 INTO 变量名;
+（4）关闭游标
+      CLOSE 游标名;
+      
+      
+      
+
+使用游标模板：
+
+CREATE PROCEDURE P()
+BEGIN
+
+-定义变量，用于存放FETCH取出来的值
+DECLARE xx INT;
+DECLARE yy VARCHAR(20);
+
+-定义游标
+DECLARE cursor CURSOR
+FOR
+SELECT ... FROM ...；
+
+-打开游标
+OPEN cursor;
+
+-取值
+FETCH cursor INTO xx,yy;
+
+-关闭游标
+CLOSE curso;
+
+END;
+
+
+
+
+
+例1：
+
+CREATE TABLE demo(number INT);
+
+CREATE PROCEDURE processorders()
+BEGIN
+
+DECLARE o INT;
+
+DECLARE ordernumbers CURSOR
+FOR
+SELECT order_id FROM goods;
+
+OPEN ordernumbers;
+
+FETCH ordernumbers INTO o;
+
+CLOSE ordernumbers;
+
+INSERT INTO demo(number) VALUES (o);
+
+END;
+
+CALL processorders();
+SELECT number FROM demo;
+
+
+
+
+例2：
+
+CREATE PROCEDURE processorders_c()
+
+BEGIN
+
+DECLARE done BOOLEAN DEFAULT 0;
+DECLARE o INT;
+DECLARE t FLOAT;
+
+DECLARE ordernumbers_c CURSOR
+FOR
+SELECT order_id FROM goods;
+
+DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done=1;
+
+CREATE TABLE IF NOT EXISTS total(order_num INT, totally FLOAT);
+
+OPEN ordernumbers_c;
+
+REPEAT
+FETCH ordernumbers_c INTO o;
+CALL ordertotal(o,t);
+INSERT INTO total(order_num, totally) VALUES(o,t);
+UNTIL done
+END REPEAT;
+
+CLOSE ordernumbers_c;
+
+END;
+
+CALL processorders_c;
+SELECT * FROM total;
+
+
+
+
+
