@@ -31,6 +31,9 @@ WHERE good='milk';
 
 使用UNION组合查询时，只能用一条ORDER BY子句，在最后一条SELECT语句之后。
 
+
+例1：
+
 SELECT * FROM goods
 WHERE price>5
 UNION
