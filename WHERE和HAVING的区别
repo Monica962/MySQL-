@@ -1,0 +1,38 @@
+一、类型
+  WHERE 是一个约束声明，WHERE 后不能接聚合函数。
+  HAVING 是一个过滤声明，HAVING 后可以写聚合函数，必须配合 GROUP BY 使用。
+  
+  
+  
+ 
+二、聚合函数
+  SUM(  );
+  MIN(  );
+  MAX(  );
+  AVG(  );
+  COUNT(  );
+  
+  
+  
+  
+三、实例
+
+1、WHERE 和 HAVING 均可使用
+  select name from student where score>60;   正确
+  select name from student having score>60;    正确
+
+2、只能用WHERE、不能用HAVING
+  select name from student where sex="man";  正确
+  select name from student having sex="man";  错误，因为前面没有筛选sex
+  
+3、只能用HAVING、不能用WHERE
+  select  goods_category_id,avg(goods_price) as ag from goods_table 
+  group by goods_category 
+  having ag>100; 正确
+  
+  select goods_category_id,avg(goods_price) as ag from goods_table 
+  where ag>100 
+  group by goods_category;  错误
+
+
+
